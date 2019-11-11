@@ -6,7 +6,7 @@
 #define MAX_HAND 500
 #define MAX_DECK 500
 
-#define MAX_PLAYERS 4
+#define MAX_PLAYERS 8
 
 #define DEBUG 0
 
@@ -127,5 +127,12 @@ int scoreFor(int player, struct gameState *state);
 int getWinners(int players[MAX_PLAYERS], struct gameState *state);
 /* Set array position of each player who won (remember ties!) to
    1, others to 0 */
+
+//test functions
+int baron_funct(struct gameState* state, int currentPlayer, int handPos, int choice1);
+int minion_funct(struct gameState* state, int currentPlayer, int handPos, int choice1, int choice2);
+int ambassador_funct(struct gameState* state, int currentPlayer, int handPos, int choice1, int choice2);
+int tribute_funct(struct gameState* state, int currentPlayer, int handPos, int nextPlayer, int tributeRevealedCards[]);
+int mine_funct(struct gameState* state, int currentPlayer, int handPos, int choice1, int choice2);
 
 #endif
