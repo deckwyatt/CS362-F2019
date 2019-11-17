@@ -679,87 +679,6 @@ int getCost(int cardNumber)
     return -1;
 }
 
-int baron_funct(struct gameState* state, int currentPlayer, int handPos, int choice1) {
-    //Increase buys by 1!
-    state->numBuys++;
-    //Boolean true or going to discard an estate
-    if (choice1 > 0) {
-        int i;
-        //Search for estate card
-        for(i; i < state->handCount[currentPlayer]; i++) {
-            //Found an estate card!
-            if (state->hand[currentPlayer][i] == estate) {
-                //Add 4 coins to the amount of coins
-                state->coins += 4;
-                //Discard estate card
-                discardCard(i, currentPlayer, state, 0);
-                return 0;
-            }
-        }
-        if(DEBUG) {
-            printf("No estate cards in your hand, invalid choice\n");
-            printf("Must gain an estate if there are any\n");
-        }
-        //Gain an estate if couldn't discard
-        gainCard(estate, state, 0, currentPlayer);
-    }
-
-    else {
-        //Gain an estate
-        gainCard(estate, state, 0, currentPlayer);
-    }
-
-    return 0;
-}
-int minion_funct(struct gameState* state, int currentPlayer, int handPos, int choice1, int choice2) {
-    int i;
-    int j;
-
-    //remove minion from hands
-    discardCard(handPos, currentPlayer, state, 0);
-    //+1 action
-    state->numActions++;
-
-    if (choice1)
-    {
-        state->coins = state->coins + 2;
-    }
-    else if (choice2)		//discard hand, redraw 4, other players with 5+ cards discard hand and draw 4
-    {
-        //discard hand
-        while(numHandCards(state) > 0)
-        {
-            discardCard(0, currentPlayer, state, 0);
-        }
-        //draw 4
-        for (i = 0; i < 4; i++)
-        {
-            drawCard(currentPlayer, state);
-        }
-
-        //other players discard hand and redraw if hand size > 4
-        for (i = 0; i < state->numPlayers; i++)
-        {
-            //have 5 or more cards only
-            if (i == currentPlayer || state->handCount[i] > 5)
-            {
-                //discard hand
-                while( state->handCount[i] > 0 )
-                {
-                    //discard first card
-                    discardCard(0, i, state, 0);
-                }
-                //draw 4
-                for (j = 0; j < 4; j++)
-                {
-                    drawCard(i, state);
-                }
-            }
-        }
-
-    }
-    return 0;
-}
 int ambassador_funct(struct gameState* state, int currentPlayer, int handPos, int choice1, int choice2) {
 
     int i;
@@ -819,58 +738,8 @@ int ambassador_funct(struct gameState* state, int currentPlayer, int handPos, in
 
     return 0;
 }
-int tribute_funct(struct gameState* state, int currentPlayer, int handPos, int nextPlayer, int tributeRevealedCards[]) {
-    int i;
-    int cardsToReveal = 2;
-    //if not enough cards
-    if (state->deckCount[nextPlayer] < cardsToReveal) {
-        //at least
-        if (state->deckCount[nextPlayer] > 0) {
-            tributeRevealedCards[0] = state->deck[nextPlayer][state->deckCount[nextPlayer]-1];
-            state->deckCount[nextPlayer]--;
-            cardsToReveal--;
-        }
-        //reshuffle
-        for (i = 0; i < state->discardCount[nextPlayer]; i++) {
-            state->deck[nextPlayer][i] = state->discard[nextPlayer][i];//Move to deck
-            state->deckCount[nextPlayer]++;
-            state->discard[nextPlayer][i] = -1;
-            state->discardCount[nextPlayer]--;
-        }
-        //Shuffle the deck
-        shuffle(nextPlayer,state);
-
-    }
-
-    tributeRevealedCards[0] = state->deck[nextPlayer][state->deckCount[nextPlayer]-1];
-    state->deck[nextPlayer][state->deckCount[nextPlayer]--] = -1;
-    state->deckCount[nextPlayer]--;
-    tributeRevealedCards[1] = state->deck[nextPlayer][state->deckCount[nextPlayer]-1];
-    state->deck[nextPlayer][state->deckCount[nextPlayer]--] = -1;
-    state->deckCount[nextPlayer]--;
-
-    //if cards the same
-    if (tributeRevealedCards[0] == tributeRevealedCards[1]) {
-        tributeRevealedCards[1] = -1;
-    }
-    //Get rewards
-    for (i = 0; i < 2; i++) {
-        if (tributeRevealedCards[i] >= copper && tributeRevealedCards[i] <= gold) { //Treasure cards
-            state->coins += 2;
-        }
-
-        else if (tributeRevealedCards[i] >= estate || tributeRevealedCards[i] == duchy || tributeRevealedCards[i] <= province) { //Victory Card Found
-            drawCard(currentPlayer, state);
-            drawCard(currentPlayer, state);
-        }
-        else if (tributeRevealedCards[i] != -1) { //Action Card
-            state->numActions = state->numActions + 2;
-        }
-    }
-    return 0;
-}
 int mine_funct(struct gameState* state, int currentPlayer, int handPos, int choice1, int choice2) {
-  
+
     int j = state->hand[currentPlayer][choice1];  //store card we will trash
 
     if (state->hand[currentPlayer][choice1] < copper || state->hand[currentPlayer][choice1] > gold)
@@ -1073,7 +942,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
         return 0;
 
     case baron:
-        return baron_funct(state, currentPlayer, handPos, choice1);
+        //return baron_funct(state, currentPlayer, handPos, choice1);
 
     case great_hall:
         //+1 Card
@@ -1087,7 +956,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
         return 0;
 
     case minion:
-        return minion_funct(state, currentPlayer, handPos, choice1, choice2);
+        //return minion_funct(state, currentPlayer, handPos, choice1, choice2);
 
     case steward:
         if (choice1 == 1)
@@ -1113,7 +982,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
         return 0;
 
     case tribute:
-        return tribute_funct(state, currentPlayer, handPos, nextPlayer, tributeRevealedCards);
+        //return tribute_funct(state, currentPlayer, handPos, nextPlayer, tributeRevealedCards);
 
     case ambassador:
         return ambassador_funct(state, currentPlayer, handPos, choice1, choice2);

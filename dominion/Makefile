@@ -16,16 +16,32 @@ testDrawCard: testDrawCard.c dominion.o rngs.o
 interface.o: interface.h interface.c
 	gcc -c interface.c -g  $(CFLAGS)
 
-runtests: testDrawCard 
+runtests: testDrawCard
 	./testDrawCard &> unittestresult.out
 	gcov dominion.c >> unittestresult.out
 	cat dominion.c.gcov >> unittestresult.out
 
+randomtest1: dominion.o randomtestcard1.c
+	gcc -o randomtestcard1 randomtestcard1.c -g dominion.o rngs.o $(CFLAGS) -ftest-coverage -fprofile-arcs
+
+randomtest2: dominion.o randomtestcard2.c
+	gcc -o randomtestcard2 randomtestcard2.c -g dominion.o rngs.o $(CFLAGS) -ftest-coverage -fprofile-arcs
+
+randomtest3: dominion.o randomtestcard3.c
+	gcc -o randomtestcard3 randomtestcard3.c -g dominion.o rngs.o $(CFLAGS) -ftest-coverage -fprofile-arcs
+
+randomtestresults: randomtest1 randomtest2 randomtest3
+	./randomtestcard1
+	./randomtestcard2
+	./randomtestcard3
+	gcov -bf randomtestcard1
+	gcov -bf randomtestcard2
+	gcov -bf randomtestcard3
 
 player: player.c interface.o
 	gcc -o player player.c -g  dominion.o rngs.o interface.o $(CFLAGS)
 
-all: playdom player 
+all: playdom player
 
 clean:
-	rm -f *.o playdom.exe playdom player player.exe  *.gcov *.gcda *.gcno *.so *.out testDrawCard testDrawCard.exe
+	rm -f *.o *.exe playdom player *.gcov *.gcda *.gcno *.so *.out testDrawCard testDrawCard.exe
