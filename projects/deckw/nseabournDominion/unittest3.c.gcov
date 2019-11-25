@@ -1,0 +1,371 @@
+        -:    0:Source:unittest3.c
+        -:    0:Graph:unittest3.gcno
+        -:    0:Data:unittest3.gcda
+        -:    0:Runs:1
+        -:    0:Programs:1
+        -:    1:#include "dominion.h"
+        -:    2:#include "dominion_helpers.h"
+        -:    3:#include "rngs.h"
+        -:    4:#include <stdio.h>
+        -:    5:#include <math.h>
+        -:    6:#include <stdlib.h>
+        -:    7://#include <assert.h>
+        -:    8:
+function assert called 69 returned 100% blocks executed 100%
+       69:    9:int assert(char* test, int target, int variable) {
+       69:    9-block  0
+       69:   10:    if (target != variable) {
+       69:   10-block  0
+branch  0 taken 25% (fallthrough)
+branch  1 taken 75%
+       17:   11:        printf("TEST FAILED: '%s', Wanted: %d, GOT: %d\n", test, target, variable);
+       17:   11-block  0
+call    0 returned 100%
+       17:   12:        return 0;
+        -:   13:    }
+        -:   14:    else {
+       52:   15:        printf("SUCCESS: %s\n", test);
+       52:   15-block  0
+call    0 returned 100%
+       52:   16:        return 1;
+        -:   17:    }
+        -:   18:}
+        -:   19:
+function main called 1 returned 100% blocks executed 100%
+        1:   20:int main() {
+        1:   20-block  0
+        1:   21:    printf("\n*************************************************************\nambassador_funct\n*************************************************************\n\n");
+        1:   21-block  0
+call    0 returned 100%
+        -:   22:    //Variables
+        -:   23:    int result;
+        -:   24:    int blank;
+        -:   25:    int assertResult;
+        -:   26:
+        -:   27:    //Variable intilization
+        1:   28:    printf("UNIT TEST: Choose to remove less than 0 cards\n");
+call    0 returned 100%
+        1:   29:    struct gameState* state = malloc(sizeof(struct gameState));
+        1:   30:    state->numPlayers = 2;
+        1:   31:    state->whoseTurn = 0;
+        1:   32:    state->numActions = 0;
+        1:   33:    state->coins = 0;
+        1:   34:    state->handCount[0] = 3;
+        1:   35:    state->hand[0][0] = ambassador;
+        1:   36:    state->hand[0][1] = estate;
+        1:   37:    state->hand[0][2] = estate;
+        1:   38:    state->playedCardCount = 0;
+        1:   39:    state->discardCount[1] = 0;
+        1:   40:    state->supplyCount[estate] = 0;
+        -:   41:
+        -:   42:    //Function call (Chooses to remove less than 0 cards)
+        1:   43:    result = cardEffect(ambassador, 1, -1, 0, state, 0, &blank);
+call    0 returned 100%
+        -:   44:
+        -:   45:    //Assertions
+        1:   46:    assertResult = assert("Function exited with an error", -1, result);
+call    0 returned 100%
+        1:   47:    assertResult = assert("No card removed", 3, state->handCount[0]);
+call    0 returned 100%
+        1:   48:    assertResult = assert("Ambassador card remained", ambassador, state->hand[0][0]);
+call    0 returned 100%
+        1:   49:    assertResult = assert("First Estate card remained", estate, state->hand[0][1]);
+call    0 returned 100%
+        1:   50:    assertResult = assert("Second Estate card remained", estate, state->hand[0][2]);
+call    0 returned 100%
+        1:   51:    assertResult = assert("No cards played", 0, state->playedCardCount);
+call    0 returned 100%
+        1:   52:    assertResult = assert("Other player didn't gain cards", 0, state->discardCount[1]);
+call    0 returned 100%
+        1:   53:    assertResult = assert("Supply not increased", 0, state->supplyCount[estate]);
+call    0 returned 100%
+        -:   54:
+        -:   55:
+        -:   56:    //Variable intilization
+        1:   57:    printf("\nUNIT TEST: Choose to remove more than 2 cards\n");
+call    0 returned 100%
+        1:   58:    state->numPlayers = 2;
+        1:   59:    state->whoseTurn = 0;
+        1:   60:    state->numActions = 0;
+        1:   61:    state->coins = 0;
+        1:   62:    state->handCount[0] = 4;
+        1:   63:    state->hand[0][0] = ambassador;
+        1:   64:    state->hand[0][1] = estate;
+        1:   65:    state->hand[0][2] = estate;
+        1:   66:    state->hand[0][3] = estate;
+        1:   67:    state->playedCardCount = 0;
+        1:   68:    state->discardCount[1] = 0;
+        1:   69:    state->supplyCount[estate] = 0;
+        -:   70:
+        -:   71:    //Function call (Chooses to remove more than 2 cards)
+        1:   72:    result = cardEffect(ambassador, 1, 3, 0, state, 0, &blank);
+call    0 returned 100%
+        -:   73:
+        -:   74:    //Assertions
+        1:   75:    assertResult = assert("Function exited with an error", -1, result);
+call    0 returned 100%
+        1:   76:    assertResult = assert("No card removed", 4, state->handCount[0]);
+call    0 returned 100%
+        1:   77:    assertResult = assert("Ambassador card remained", ambassador, state->hand[0][0]);
+call    0 returned 100%
+        1:   78:    assertResult = assert("First Estate card remained", estate, state->hand[0][1]);
+call    0 returned 100%
+        1:   79:    assertResult = assert("Second Estate card remained", estate, state->hand[0][2]);
+call    0 returned 100%
+        1:   80:    assertResult = assert("Third Estate card remained", estate, state->hand[0][3]);
+call    0 returned 100%
+        1:   81:    assertResult = assert("No cards played", 0, state->playedCardCount);
+call    0 returned 100%
+        1:   82:    assertResult = assert("Other player didn't gain cards", 0, state->discardCount[1]);
+call    0 returned 100%
+        1:   83:    assertResult = assert("Supply not increased", 0, state->supplyCount[estate]);
+call    0 returned 100%
+        -:   84:
+        -:   85:
+        -:   86:    //Variable intilization
+        1:   87:    printf("\nUNIT TEST: Choose to reveal played card\n");
+call    0 returned 100%
+        1:   88:    state->numPlayers = 2;
+        1:   89:    state->whoseTurn = 0;
+        1:   90:    state->numActions = 0;
+        1:   91:    state->coins = 0;
+        1:   92:    state->handCount[0] = 4;
+        1:   93:    state->hand[0][0] = ambassador;
+        1:   94:    state->hand[0][1] = estate;
+        1:   95:    state->hand[0][2] = estate;
+        1:   96:    state->hand[0][3] = estate;
+        1:   97:    state->playedCardCount = 0;
+        1:   98:    state->discardCount[1] = 0;
+        1:   99:    state->supplyCount[estate] = 0;
+        -:  100:
+        -:  101:    //Function call (Chooses to reveal played card)
+        1:  102:    result = cardEffect(ambassador, 0, 1, 0, state, 0, &blank);
+call    0 returned 100%
+        -:  103:
+        -:  104:    //Assertions
+        1:  105:    assertResult = assert("Function exited with an error", -1, result);
+call    0 returned 100%
+        1:  106:    assertResult = assert("No card removed", 4, state->handCount[0]);
+call    0 returned 100%
+        1:  107:    assertResult = assert("Ambassador card remained", ambassador, state->hand[0][0]);
+call    0 returned 100%
+        1:  108:    assertResult = assert("First Estate card remained", estate, state->hand[0][1]);
+call    0 returned 100%
+        1:  109:    assertResult = assert("Second Estate card remained", estate, state->hand[0][2]);
+call    0 returned 100%
+        1:  110:    assertResult = assert("Third Estate card remained", estate, state->hand[0][3]);
+call    0 returned 100%
+        1:  111:    assertResult = assert("No cards played", 0, state->playedCardCount);
+call    0 returned 100%
+        1:  112:    assertResult = assert("Other player didn't gain cards", 0, state->discardCount[1]);
+call    0 returned 100%
+        1:  113:    assertResult = assert("Supply not increased", 0, state->supplyCount[estate]);
+call    0 returned 100%
+        -:  114:
+        -:  115:
+        -:  116:    //Variable intilization
+        1:  117:    printf("\nUNIT TEST: Choose to return too many cards\n");
+call    0 returned 100%
+        1:  118:    state->numPlayers = 2;
+        1:  119:    state->whoseTurn = 0;
+        1:  120:    state->numActions = 0;
+        1:  121:    state->coins = 0;
+        1:  122:    state->handCount[0] = 2;
+        1:  123:    state->hand[0][0] = ambassador;
+        1:  124:    state->hand[0][1] = estate;
+        1:  125:    state->playedCardCount = 0;
+        1:  126:    state->discardCount[1] = 0;
+        1:  127:    state->supplyCount[estate] = 0;
+        -:  128:
+        -:  129:    //Function call (Chooses to return too many cards)
+        1:  130:    result = cardEffect(ambassador, 1, 2, 0, state, 0, &blank);
+call    0 returned 100%
+        -:  131:
+        -:  132:    //Assertions
+        1:  133:    assertResult = assert("Function exited with an error", -1, result);
+call    0 returned 100%
+        1:  134:    assertResult = assert("No card removed", 2, state->handCount[0]);
+call    0 returned 100%
+        1:  135:    assertResult = assert("Ambassador card remained", ambassador, state->hand[0][0]);
+call    0 returned 100%
+        1:  136:    assertResult = assert("First Estate card remained", estate, state->hand[0][1]);
+call    0 returned 100%
+        1:  137:    assertResult = assert("No cards played", 0, state->playedCardCount);
+call    0 returned 100%
+        1:  138:    assertResult = assert("Other player didn't gain cards", 0, state->discardCount[1]);
+call    0 returned 100%
+        1:  139:    assertResult = assert("Supply not increased", 0, state->supplyCount[estate]);
+call    0 returned 100%
+        -:  140:
+        -:  141:
+        -:  142:    //Variable intilization
+        1:  143:    printf("\nUNIT TEST: Valid play (remove 0 cards)\n");
+call    0 returned 100%
+        1:  144:    state->numPlayers = 2;
+        1:  145:    state->whoseTurn = 0;
+        1:  146:    state->numActions = 0;
+        1:  147:    state->coins = 0;
+        1:  148:    state->handCount[0] = 4;
+        1:  149:    state->hand[0][0] = ambassador;
+        1:  150:    state->hand[0][1] = estate;
+        1:  151:    state->hand[0][2] = estate;
+        1:  152:    state->hand[0][3] = estate;
+        1:  153:    state->playedCardCount = 0;
+        1:  154:    state->discardCount[1] = 0;
+        1:  155:    state->supplyCount[estate] = 1;
+        -:  156:
+        -:  157:    //Function call (Valid play)
+        1:  158:    result = cardEffect(ambassador, 1, 0, 0, state, 0, &blank);
+call    0 returned 100%
+        -:  159:
+        -:  160:    //Assertions
+        1:  161:    assertResult = assert("Function exited correctly", 0, result);
+call    0 returned 100%
+        1:  162:    assertResult = assert("Correct number of cards removed", 3, state->handCount[0]);
+call    0 returned 100%
+        1:  163:    assertResult = assert("First card is an estate", estate, state->hand[0][0]);
+call    0 returned 100%
+        1:  164:    assertResult = assert("Second card is an estate", estate, state->hand[0][1]);
+call    0 returned 100%
+        1:  165:    assertResult = assert("Third card is an estate", estate, state->hand[0][2]);
+call    0 returned 100%
+        1:  166:    assertResult = assert("Card played", 1, state->playedCardCount);
+call    0 returned 100%
+        1:  167:    assertResult = assert("Ambassador card played", ambassador, state->playedCards[0]);
+call    0 returned 100%
+        1:  168:    assertResult = assert("Other player gains 1 card", 1, state->discardCount[1]);
+call    0 returned 100%
+        1:  169:    assertResult = assert("Other player gains 1 estate card", 1, state->discard[1][0]);
+call    0 returned 100%
+        1:  170:    assertResult = assert("Supply nets -1", 0, state->supplyCount[estate]);
+call    0 returned 100%
+        -:  171:
+        -:  172:
+        -:  173:    //Variable intilization
+        1:  174:    printf("\nUNIT TEST: Valid play (remove 1 card)\n");
+call    0 returned 100%
+        1:  175:    state->numPlayers = 2;
+        1:  176:    state->whoseTurn = 0;
+        1:  177:    state->numActions = 0;
+        1:  178:    state->coins = 0;
+        1:  179:    state->handCount[0] = 4;
+        1:  180:    state->hand[0][0] = ambassador;
+        1:  181:    state->hand[0][1] = estate;
+        1:  182:    state->hand[0][2] = estate;
+        1:  183:    state->hand[0][3] = estate;
+        1:  184:    state->playedCardCount = 0;
+        1:  185:    state->discardCount[1] = 0;
+        1:  186:    state->supplyCount[estate] = 1;
+        -:  187:
+        -:  188:    //Function call (Valid play)
+        1:  189:    result = cardEffect(ambassador, 1, 1, 0, state, 0, &blank);
+call    0 returned 100%
+        -:  190:
+        -:  191:    //Assertions
+        1:  192:    assertResult = assert("Function exited correctly", 0, result);
+call    0 returned 100%
+        1:  193:    assertResult = assert("Correct number of cards removed", 2, state->handCount[0]);
+call    0 returned 100%
+        1:  194:    assertResult = assert("First card is an estate", estate, state->hand[0][0]);
+call    0 returned 100%
+        1:  195:    assertResult = assert("Second card is an estate", estate, state->hand[0][1]);
+call    0 returned 100%
+        1:  196:    assertResult = assert("Card played", 1, state->playedCardCount);
+call    0 returned 100%
+        1:  197:    assertResult = assert("Ambassador card played", ambassador, state->playedCards[0]);
+call    0 returned 100%
+        1:  198:    assertResult = assert("Other player gains 1 card", 1, state->discardCount[1]);
+call    0 returned 100%
+        1:  199:    assertResult = assert("Other player gains 1 estate card", 1, state->discard[1][0]);
+call    0 returned 100%
+        1:  200:    assertResult = assert("Supply nets no cards", 1, state->supplyCount[estate]);
+call    0 returned 100%
+        -:  201:
+        -:  202:
+        -:  203:    //Variable intilization
+        1:  204:    printf("\nUNIT TEST: Valid play (remove 2 cards)\n");
+call    0 returned 100%
+        1:  205:    state->numPlayers = 2;
+        1:  206:    state->whoseTurn = 0;
+        1:  207:    state->numActions = 0;
+        1:  208:    state->coins = 0;
+        1:  209:    state->handCount[0] = 4;
+        1:  210:    state->hand[0][0] = ambassador;
+        1:  211:    state->hand[0][1] = estate;
+        1:  212:    state->hand[0][2] = estate;
+        1:  213:    state->hand[0][3] = estate;
+        1:  214:    state->playedCardCount = 0;
+        1:  215:    state->discardCount[1] = 0;
+        1:  216:    state->supplyCount[estate] = 1;
+        -:  217:
+        -:  218:    //Function call (Valid play)
+        1:  219:    result = cardEffect(ambassador, 1, 2, 0, state, 0, &blank);
+call    0 returned 100%
+        -:  220:
+        -:  221:    //Assertions
+        1:  222:    assertResult = assert("Function exited correctly", 0, result);
+call    0 returned 100%
+        1:  223:    assertResult = assert("Correct number of cards removed", 1, state->handCount[0]);
+call    0 returned 100%
+        1:  224:    assertResult = assert("First card is an estate", estate, state->hand[0][0]);
+call    0 returned 100%
+        1:  225:    assertResult = assert("Card played", 1, state->playedCardCount);
+call    0 returned 100%
+        1:  226:    assertResult = assert("Ambassador card played", ambassador, state->playedCards[0]);
+call    0 returned 100%
+        1:  227:    assertResult = assert("Other player gains 1 card", 1, state->discardCount[1]);
+call    0 returned 100%
+        1:  228:    assertResult = assert("Other player gains 1 estate card", 1, state->discard[1][0]);
+call    0 returned 100%
+        1:  229:    assertResult = assert("Supply nets 1", 2, state->supplyCount[estate]);
+call    0 returned 100%
+        -:  230:
+        -:  231:
+        -:  232:    //Variable intilization
+        1:  233:    printf("\nUNIT TEST: Valid play (remove 2 cards, other cards in hand)\n");
+call    0 returned 100%
+        1:  234:    state->numPlayers = 2;
+        1:  235:    state->whoseTurn = 0;
+        1:  236:    state->numActions = 0;
+        1:  237:    state->coins = 0;
+        1:  238:    state->handCount[0] = 5;
+        1:  239:    state->hand[0][0] = ambassador;
+        1:  240:    state->hand[0][1] = estate;
+        1:  241:    state->hand[0][2] = ambassador;
+        1:  242:    state->hand[0][3] = estate;
+        1:  243:    state->hand[0][4] = ambassador;
+        1:  244:    state->playedCardCount = 0;
+        1:  245:    state->discardCount[1] = 0;
+        1:  246:    state->supplyCount[estate] = 1;
+        -:  247:
+        -:  248:    //Function call (Valid play)
+        1:  249:    result = cardEffect(ambassador, 1, 2, 0, state, 0, &blank);
+call    0 returned 100%
+        -:  250:
+        -:  251:    //Assertions
+        1:  252:    assertResult = assert("Function exited correctly", 0, result);
+call    0 returned 100%
+        1:  253:    assertResult = assert("Correct number of cards removed", 2, state->handCount[0]);
+call    0 returned 100%
+        1:  254:    assertResult = assert("First card is an ambassador", ambassador, state->hand[0][0]);
+call    0 returned 100%
+        1:  255:    assertResult = assert("Second card is an ambassador", ambassador, state->hand[0][1]);
+call    0 returned 100%
+        1:  256:    assertResult = assert("Card played", 1, state->playedCardCount);
+call    0 returned 100%
+        1:  257:    assertResult = assert("Ambassador card played", ambassador, state->playedCards[0]);
+call    0 returned 100%
+        1:  258:    assertResult = assert("Other player gains 1 card", 1, state->discardCount[1]);
+call    0 returned 100%
+        1:  259:    assertResult = assert("Other player gains 1 estate card", 1, state->discard[1][0]);
+call    0 returned 100%
+        1:  260:    assertResult = assert("Supply nets 1", 2, state->supplyCount[estate]);
+call    0 returned 100%
+        -:  261:
+        -:  262:
+        1:  263:    assertResult = assertResult + 1;
+        1:  264:    printf("\n");
+call    0 returned 100%
+        1:  265:    free(state);
+        1:  266:    return 0;
+        -:  267:}
